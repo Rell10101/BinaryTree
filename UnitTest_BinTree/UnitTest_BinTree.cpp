@@ -157,5 +157,43 @@ namespace UnitTestBinTree
 			bool a = arr == arr1;
 			Assert::IsTrue(a == 1);
 		};
+
+		TEST_METHOD(TestMethod_Apply)
+		{
+			TreeNode<int>* leftleaf, * rightleaf, * root;
+			leftleaf = new TreeNode<int>(3);
+
+			rightleaf = new TreeNode<int>(10);
+			root = new TreeNode<int>(8, leftleaf, rightleaf);
+			InsertNode(root, 1);
+			InsertNode(root, 6);
+			InsertNode(root, 4);
+			InsertNode(root, 7);
+			InsertNode(root, 14);
+			InsertNode(root, 13);
+
+			Assert::IsTrue(root->Data() == 8);
+			add1(root);
+			Assert::IsTrue(root->Data() == 9);
+		};
+
+		TEST_METHOD(TestMethod_Apply2)
+		{
+			TreeNode<int>* leftleaf, * rightleaf, * root;
+			leftleaf = new TreeNode<int>(3);
+
+			rightleaf = new TreeNode<int>(10);
+			root = new TreeNode<int>(8, leftleaf, rightleaf);
+			InsertNode(root, 1);
+			InsertNode(root, 6);
+			InsertNode(root, 4);
+			InsertNode(root, 7);
+			InsertNode(root, 14);
+			InsertNode(root, 13);
+
+			Assert::IsTrue(root->Data() == 8);
+			squaring(root);
+			Assert::IsTrue(root->Data() == 64);
+		};
 	};
 }
