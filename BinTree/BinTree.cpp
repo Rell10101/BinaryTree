@@ -41,15 +41,11 @@ int main()
 
 
     TreeNode<int>* leftleaf, * rightleaf, * root;
-    //создаётся указатель на лист дерева (указатели на левый и правый узлы nullptr)
     leftleaf = new TreeNode<int>(3);
 
     rightleaf = new TreeNode<int>(10);
     root = new TreeNode<int>(8, leftleaf, rightleaf);
 
-    //leftleaf = new TreeNode<int>(1);
-    //rightleaf = new TreeNode<int>(6);
-    //root = new TreeNode<int>(3, leftleaf, rightleaf);
 
     InsertNode(root, 1);
     InsertNode(root, 6);
