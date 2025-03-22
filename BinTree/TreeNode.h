@@ -7,6 +7,8 @@
 #include <queue>
 
 
+
+
 template <typename T>
 class TreeNode
 {
@@ -22,7 +24,9 @@ public:
 
 	// конструктор без параметров
 	// Компилятор напишет конструктор по умолчанию
-	TreeNode() = default;
+	// Конструктор без параметров
+	TreeNode() : left(nullptr), right(nullptr) {}
+	//TreeNode() = default;
 
 	// конструктор с параметрами
 	TreeNode(const T& item, TreeNode<T>* lptr = nullptr, TreeNode<T>* rptr = nullptr);
@@ -30,12 +34,6 @@ public:
 	// методы доступа к полям указателей
 	TreeNode<T>* Left() const;
 	TreeNode<T>* Right() const;
-
-
-	// сделать класс BinSTree дружественным, поскольку необходим
-	// доступ к полям left и right
-	//friend class BinSTree<T>;
-
 
 	// метод доступа к полю данных
 	T Data() const;
@@ -45,6 +43,7 @@ public:
 	void SetRight(TreeNode<T>* right1);
 	void SetData(T data1);
 };
+
 
 
 // конструктор инициализирует поля данных и указателей
@@ -101,6 +100,8 @@ void printNode(TreeNode<T>* root) {
 	std::cout << root->Data() << " ";
 }
 
+
+
 // функция добавления единицы к значению узла
 template <typename T>
 void add1(TreeNode<T>* root) {
@@ -127,6 +128,7 @@ void preorderPrint(TreeNode<T>* root, void (*func) (TreeNode<T>*))
 	}
 
 }
+
 
 
 // поиск узла по значению
@@ -189,7 +191,11 @@ TreeNode<T>* getNextLeft(TreeNode<T>* root)
 	return root;
 }
 
-// нахождение ближайшего наибольшего
+// нахождение ближайшего наибольшего(пример: есть значения 3, 5, 6; в таком случае для 3 ближайший наиб - 5)
+//																				TODO: разобраться со всеми вариантами
+// root - корень всего дерева
+// succ - переменная, в которую будет записан указатель на ближайшего наибольшего
+// key - значение данных в узле, относительно которого будет искаться ближайшее наибольшее
 template <typename T>
 void Successor(TreeNode<T>* root, TreeNode<T>*& succ, int key) {
 
@@ -219,8 +225,57 @@ void Successor(TreeNode<T>* root, TreeNode<T>*& succ, int key) {
 	}
 }
 
-// операция удаления узла из бинарного дерева поиска
+// поиск ближайшего наибольшего
 template <typename T>
+TreeNode<T>* minValueNode(TreeNode<T>* node) {
+	TreeNode<T>* current = node;
+	while (current && current->Left() != nullptr) {
+		current = current->Left();
+	}
+	return current;
+}
+
+// функция удаления узла
+template <typename T>
+TreeNode<T>* removeNode(TreeNode<T>* node, const T value) {
+	// базовый случай для предотвращения бесконечной рекурсии
+	if (node == nullptr) {
+		return node;
+	}
+
+	// рекурсивный случай
+	if (value < node->Data()) {
+		node->SetLeft(removeNode(node->Left(), value));
+	}
+	else if (value > node->Data()) {
+		node->SetRight(removeNode(node->Right(), value));
+	}
+	else {
+		// случай с 1 или 0 потомков
+		if (node->Left() == nullptr) {
+			TreeNode<T>* temp = node->Right();
+			delete node;
+			return temp;
+		}
+		else if (node->Right() == nullptr) {
+			TreeNode<T>* temp = node->Left();
+			delete node;
+			return temp;
+		}
+
+		// случай с 2 потомками, 
+		// поиск ближайшего наибольшего(самого малого значения в правом поддереве относительно текущего узла)
+		TreeNode<T>* temp = minValueNode(node->Right());
+		// установка значения ближайшего наибольшего на место удаляемого узла
+		node->SetData(temp->Data());
+		node->SetRight(removeNode(node->Right(), temp->Data()));
+	}
+	return node;
+}
+
+// TODO: разобраться детально
+// операция удаления узла из бинарного дерева поиска
+/*template <typename T>
 TreeNode<T>* DeleteNode(TreeNode<T>* root, const T value) {
 
 	// базовый случай
@@ -231,10 +286,12 @@ TreeNode<T>* DeleteNode(TreeNode<T>* root, const T value) {
 	// рекурсивный вызов функции, пока не будет найден узел, который нужно удалить
 	if (root->Data() > value) {
 		root->SetLeft(DeleteNode(root->Left(), value));
+		//DeleteNode(root->Left(), value);
 		return root;
 	}
 	else if (root->Data() < value) {
 		root->SetRight(DeleteNode(root->Right(), value));
+		//DeleteNode(root->Right(), value);
 		return root;
 	}
 
@@ -286,7 +343,8 @@ TreeNode<T>* DeleteNode(TreeNode<T>* root, const T value) {
 		delete succ;
 		return root;
 	}
-}
+}*/
+
 
 
 // cоздание массива на основе дерева (обратный обход)

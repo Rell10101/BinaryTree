@@ -4,6 +4,12 @@
 #include <iostream>
 #include "TreeNode.h"
 
+// Печать узла дерева
+template <typename T>
+void print42(TreeNode<T>* root) {
+    std::cout  << "42";
+}
+
 int main()
 {
     // создаётся указатели на узлы дерева 
@@ -54,15 +60,26 @@ int main()
     InsertNode(root, 14);
     InsertNode(root, 13);
 
+    //std::cout << "RemoveNodeTest: " << RemoveNode(root, 13) << std::endl;
+
+    preorderPrint(root, printNode);
+    preorderPrint(root, print42);
+    std::cout << std::endl;
+
+    std::cout << "Before delete" << std::endl;
+    preorderPrint(root, printNode);
+    std::cout << std::endl;
+    removeNode(root, 14);
+    std::cout << "After delete" << std::endl;
     preorderPrint(root, printNode);
     std::cout << std::endl;
 
 
-    std::vector<int> arr;
+    /*std::vector<int> arr;
     TreeToArrayLRN(root, arr);
     for (int i = 0; i < 9; i++) {
         std::cout << arr[i] << " ";
-    }
+    }*/
     //std::cout << SearchNode(root, 4) << std::endl;
 
 
